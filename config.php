@@ -7,4 +7,3 @@ $conn = new mysqli("localhost", "root", "", "club_natation");
 if ($conn->connect_error) {
     die("Erreur de connexion: " . $conn->connect_error);
 }
-?>

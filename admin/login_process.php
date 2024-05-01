@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Inclure le fichier de configuration de la base de données
 include('config.php');
 
@@ -7,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les valeurs du formulaire
     $email = $_POST['email'];
     $password = $_POST['password'];
+   
 
     // Préparer la requête SQL pour récupérer l'utilisateur et son rôle
     $sql = "SELECT u.utilisateur_id, u.nom, u.email, u.mot_de_passe, r.role_id, r.nom AS role_nom
@@ -29,12 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         switch ($role) {
             case 'administrateur':
                 header("Location: admin_dashboard.php");
+                $_SESSION['email_admin']=$row['email'];
                 break;
             case 'entraineur':
                 header("Location: entraineur_dashboard.php");
+                $_SESSION['email_entraineur']=$row['email'];
                 break;
             case 'parent':
                 header("Location: parent_dashboard.php");
+                
+                $_SESSION['email_parent']=$row['email'];
                 break;
             default:
                 // Gérer une erreur de rôle invalide
