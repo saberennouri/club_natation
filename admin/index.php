@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,12 +32,17 @@
                                 <select name="role_id" class="form-control">
                                
                                 <?php
+                                session_start();
+                                
                                 include 'config.php';
                                 $req="select * from roles";                                
                                 $result = mysqli_query($conn, $req);
                                 if(mysqli_num_rows($result) > 0) {
+
                                     while($row = mysqli_fetch_assoc($result)) {
+                                                                                                                                                 
                                         echo "<option value='" . $row['role_id'] . "'>" . $row['nom'] . "</option>";
+                                        
                                     }
                                 }
                                 ?>

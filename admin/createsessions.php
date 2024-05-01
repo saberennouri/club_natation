@@ -3,6 +3,9 @@ include('includes/header.php');
 include('includes/navbar.php');
 ?>
 
+
+
+
 <div class="container mt-5">
     <h2>Créer une nouvelle session d'entraînement</h2>
     <form method="post" action="addsessions.php">

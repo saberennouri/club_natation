@@ -1,37 +1,16 @@
-<?php
-session_start(); // Démarrer la session
+<?php 
+session_start();
+include './config.php';
 
-include('config.php');
+//$email = $_SESSION['entraineur_email'];
 
-// Vérifier si l'ID de l'entraîneur est défini dans la session
-if(isset($_SESSION['entraineur_id'])) {
-    $entraineur_id = $_SESSION['entraineur_id']; // Récupérer l'ID de l'entraîneur à partir de la session
-    
-    // Récupérer les données de l'entraîneur à partir de la base de données
-    $sql = "SELECT * FROM entraineurs WHERE entraineur_id = $entraineur_id";
-    $result = mysqli_query($conn, $sql);
-    
-    // Vérifier si des données ont été trouvées
-    if(mysqli_num_rows($result) > 0) {
-        $entraineur = mysqli_fetch_assoc($result);
-        
-        // Traitement du formulaire s'il est soumis
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            foreach ($_POST['athlete_id'] as $athlete_id) {
-                $absent = isset($_POST['absent'][$athlete_id]) ? 1 : 0;
-                // Insérer ou mettre à jour l'absence de l'athlète dans la base de données
-                $sql_update = "INSERT INTO athletes_absences (athlete_id, absent) VALUES ($athlete_id, $absent) ON DUPLICATE KEY UPDATE absent = $absent";
-                mysqli_query($conn, $sql_update);
-            }
-        }
-    } else {
-        echo "Aucun entraîneur trouvé avec cet ID.";
-    }
-} else {
-    echo "ID de l'entraîneur non défini dans la session.";
-}
+$entr="SELECT * FROM entraineurs";
+$query_entr=mysqli_query($conn,$entr);
+$res_entr=mysqli_fetch_assoc($query_entr);
+
+if($res_entr) { // Vérifie si l'entraîneur existe
+    $entraineur_id=$res_entr['entraineur_id'];
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,16 +21,49 @@ if(isset($_SESSION['entraineur_id'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="../home.php">Dashboard Parent</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="takedate.php">Ajouter RDV</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="liste_rdv.php">Lister RDV</a>
+      </li>     
+     
+ 
+    <form class="form-inline my-2 my-lg-0">
+    
+      
+      <li class="nav-item dropdown right">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <?php 
+          
+          $sql="select * from parents";
+          $result=mysqli_query($conn,$sql);
+          $row=mysqli_fetch_array($result);
+          echo $row['nom']; ?>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="editprofile.php?id='<?php echo $row['idpatient'];?>'">Modifier Profile</a>
+          <a class="dropdown-item" href="logout.php">Déconnexion</a>
+          
+        </div>
+      </li>
+      
+    </ul>
+      
+    </form>
+  </div>
+</nav>
     <div class="container mt-5">
-        <h2>Bienvenue <?php echo $entraineur['prenom'] . ' ' . $entraineur['nom']; ?> sur votre tableau de bord</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Profil de l'entraîneur</h3>
-                <p><strong>Nom:</strong> <?php echo $entraineur['nom']; ?></p>
-                <p><strong>Prénom:</strong> <?php echo $entraineur['prenom']; ?></p>
-                <p><strong>Email:</strong> <?php echo $entraineur['email']; ?></p>
-                <!-- Ajoutez d'autres détails du profil de l'entraîneur ici -->
-            </div>
+        <h2>Bienvenue sur votre tableau de bord</h2>
+       
             <div class="col-md-6">
                 <h3>Vos athlètes</h3>
                 <form method="POST">
@@ -89,3 +101,10 @@ if(isset($_SESSION['entraineur_id'])) {
     </div>
 </body>
 </html>
+
+<?php 
+} else {
+    // Afficher un message si aucun entraîneur n'est trouvé
+    echo "Aucun entraîneur trouvé.";
+}
+?>

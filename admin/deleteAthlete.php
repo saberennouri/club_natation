@@ -6,7 +6,7 @@ if(isset($_GET['id'])) {
     $athlete_id = $_GET['id'];
 
     // Requête pour récupérer les détails du parent
-    $query = "SELECT * FROM athletes WHERE athlete_id = $athlete_id";
+    $query = "SELECT nom FROM athletes WHERE athlete_id = $athlete_id";
     $result = mysqli_query($conn, $query);
 
     // Vérifier si la requête a retourné des résultats
