@@ -18,12 +18,18 @@ include('config.php');
                 url: 'update_statut.php',
                 data: { adhesion_id: adhesion_id, new_status: nouveauStatut },
                 success: function(nouveauStatut) {
-                    // Mettre à jour le contenu de la cellule statut avec le nouveau statut
+                    // Mettre à jour le contenu de la cellule statut avec le nouveau statut et la couleur appropriée
                     $("#statut_" + adhesion_id).text(nouveauStatut);
+                    if (nouveauStatut === "refusé") {
+                        $("#statut_" + adhesion_id).css("color", "red");
+                    } else if (nouveauStatut === "accepté") {
+                        $("#statut_" + adhesion_id).css("color", "green");
+                    } else {
+                        $("#statut_" + adhesion_id).css("color", ""); // Réinitialiser la couleur
+                    }
                     window.location.href='adhesions.php';
-                
                 },
-                error: function(xhr, status, error) {
+                     error: function(xhr, status, error) {
                     // Gérer les erreurs
                     alert("Erreur lors de la mise à jour du statut : " + error);
                 }
@@ -51,25 +57,24 @@ include('config.php');
         <tbody>
             <?php
             // Récupérer les adhésions depuis la base de données
-            $sql = "SELECT a.prenom as prenom_athlete, a.nom as nom_athlete, ad.*,
-                           COALESCE(ad.statut, 'Statut par défaut') AS statut_affiche
-                    FROM athletes a
-                    LEFT JOIN adhesion ad ON a.athlete_id = ad.athlete_id
-                    ORDER BY ad.adhesion_id ASC";
-
+            $sql = "SELECT  * from adhesion";
             $result = mysqli_query($conn, $sql);
-
             // Affichage des résultats dans une table
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    $athlete_id = $row['athlete_id'];
+                    $sqlathlete="select * from athletes where athlete_id=$athlete_id";
+                    $resultathlete = mysqli_query($conn, $sqlathlete);
+                    $rowathlete = $resultathlete->fetch_assoc();                  
+
                     echo "<tr>";
                     echo "<td>".$row['adhesion_id']."</td>";
-                    echo "<td>".$row['nom_athlete']."_".$row['prenom_athlete']."</td>";
+                    echo "<td>".$rowathlete['nom']."_".$rowathlete['prenom']."</td>";
                     echo "<td>".$row['date_debut']."</td>";
                     echo "<td>".$row['date_fin']."</td>";
-                    echo "<td onclick=\"modifierStatut(".$row['adhesion_id'].")\">".$row['statut_affiche']."</td>";
+                    echo "<td onclick=\"modifierStatut(".$row['adhesion_id'].")\">".$row['statut']."</td>";
                     echo "<td>
-                    <a href='read_adhesion.php?id=" . $row['adhesion_id'] . "' class='btn btn-info'>Lire</a>
+                 
                     <a href='update_adhesion.php?id=" . $row['adhesion_id'] . "' class='btn btn-warning'>Modifier</a>
                     <a href='delete_adhesion.php?id=" . $row['adhesion_id'] . "' class='btn btn-danger'>Supprimer</a>
                     </td>";

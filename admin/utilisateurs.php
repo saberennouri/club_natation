@@ -38,7 +38,7 @@ include('includes/navbar.php');
                     echo "<td>".$row['nom_role']."</td>";
                     echo "<td>".$row['mot_de_passe']."</td>";
                     echo "<td>
-                            <a href='readUser.php?id=".$row['utilisateur_id']."' class='btn btn-info'>Lire</a>
+                            
                             <a href='updateUser.php?id=".$row['utilisateur_id']."' class='btn btn-warning'>Modifier</a>
                             <a href='deleteUser.php?id=".$row['utilisateur_id']."' class='btn btn-danger'>Supprimer</a>
                           </td>";

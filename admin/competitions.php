@@ -37,7 +37,7 @@ include('includes/navbar.php');
                    
                     echo "<td>".$row['lieu']."</td>";
                     echo "<td>
-                            <a href='readCompetition.php?id=".$row['competition_id']."' class='btn btn-info'>Lire</a>
+                            
                             <a href='updateCompetition.php?id=".$row['competition_id']."' class='btn btn-warning'>Modifier</a>
                             <a href='deleteCompetiton.php?id=".$row['competition_id']."' class='btn btn-danger'>Supprimer</a>
                           </td>";

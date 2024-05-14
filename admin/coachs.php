@@ -36,7 +36,7 @@ include('includes/navbar.php');
                     <td>".$row['email']."</td>
                     <td>".$row['numero_telephone']."</td>
                     <td>
-                    <a href='readCoach.php?id=".$row['entraineur_id']."' class='btn btn-info'>Lire</a>
+                    
                     <a href='updateCoach.php?id=".$row['entraineur_id']."' class='btn btn-warning'>Modifier</a>
                     <a href='deleteCoach.php?id=".$row['entraineur_id']."' class='btn btn-danger'>Supprimer</a>
                     </td>

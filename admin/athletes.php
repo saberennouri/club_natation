@@ -55,7 +55,7 @@ include('includes/navbar.php');
                     <td>" . $row['prenom_parent'] . "_" . $row["nom_parent"] . "</td>
                     <td>" . $row['prenom_entraineur'] . "_" . $row["nom_entraineur"] . "</td>
                     <td>
-                    <a href='readAthlete.php?id=" . $row['athlete_id'] . "' class='btn btn-info'>Lire</a>
+                   
                     <a href='updateAthlete.php?id=" . $row['athlete_id'] . "' class='btn btn-warning'>Modifier</a>
                     <a href='deleteAthlete.php?id=" . $row['athlete_id'] . "' class='btn btn-danger'>Supprimer</a>
                     </td>

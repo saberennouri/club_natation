@@ -2,7 +2,6 @@
 session_start();
 include './config.php';
 
-//$email = $_SESSION['entraineur_email'];
 
 $entr="SELECT * FROM entraineurs";
 $query_entr=mysqli_query($conn,$entr);
@@ -21,6 +20,7 @@ if($res_entr) { // Vérifie si l'entraîneur existe
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+  
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="../home.php">Dashboard Parent</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,18 +39,22 @@ if($res_entr) { // Vérifie si l'entraîneur existe
  
     <form class="form-inline my-2 my-lg-0">
     
-      
+    <div class="sl-user__mobile-menu">
+      <div class="sl-user__image-wrapper sl-user__image-wrapper--active">
+        <img class="sl-user__select__image" src="https://blob.sololearn.com/avatars/c0f5aea3-dde1-46a8-8df0-68fd1de11023.jpg" alt="user-avatar"></div><div class="sl-user-settings__name"><span class="sl-user-settings__name__title">Ennouri Saber</span><p class="sl-user-settings__name__goto"
+    >Go to profile</p></div></div>
       <li class="nav-item dropdown right">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <?php 
           
-          $sql="select * from parents";
+          $sql="select * from entraineurs";
           $result=mysqli_query($conn,$sql);
           $row=mysqli_fetch_array($result);
-          echo $row['nom']; ?>
+          echo $row['nom']; 
+          //echo $row['entraineur_id'];?>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="editprofile.php?id='<?php echo $row['idpatient'];?>'">Modifier Profile</a>
+          <a class="dropdown-item" href="editprofile.php?id='<?php echo $row['entraineur_id'];?>'">Modifier Profile</a>
           <a class="dropdown-item" href="logout.php">Déconnexion</a>
           
         </div>

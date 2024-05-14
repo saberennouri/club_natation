@@ -37,7 +37,7 @@ include('includes/navbar.php');
                     echo "<td>".$row['email']."</td>";
                     echo "<td>".$row['numero_telephone']."</td>";
                     echo "<td>
-                            <a href='readParents.php?id=".$row['parent_id']."' class='btn btn-info'>Lire</a>
+                           
                             <a href='updateParents.php?id=".$row['parent_id']."' class='btn btn-warning'>Modifier</a>
                             <a href='deleteParents.php?id=".$row['parent_id']."' class='btn btn-danger'>Supprimer</a>
                           </td>";

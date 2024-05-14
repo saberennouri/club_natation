@@ -33,6 +33,3 @@ if (isset($_POST['ajouter'])) {
     }
     echo "<script>window.location.href='athletes.php'</script>";
 }
-
-
-?>
