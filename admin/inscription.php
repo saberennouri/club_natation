@@ -1,7 +1,13 @@
 <?php
- session_start();
- if(isset($_SESSION['id'])){
-     $_SESSION['email']=$_POST['email'];}
+// demarrer la session
+session_start();
+// Inclure le fichier de configuration de la base de données
+include "./config.php";
+include "./includes/header.php";
+
+// Récupérer les rôles depuis la base de données
+$sqlRole = "SELECT * FROM roles";
+$resRole = mysqli_query($conn, $sqlRole);
 ?>
 
 <!DOCTYPE html>
@@ -70,9 +76,9 @@ form{
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
     padding: 50px 35px;
 }
-form *{
-    font-family: 'Poppins',sans-serif;
-    color: #ffffff;
+form * {
+    font-family: 'Poppins', sans-serif;
+    color: #676464;
     letter-spacing: 0.5px;
     outline: none;
     border: none;
@@ -129,7 +135,7 @@ button{
   text-align: center;
 }
 .social div:hover{
-  background-color: rgba(255,255,255,0.47);
+  background-color: rgba(255,255,255,0.45);
 }
 .social .fb{
   margin-left: 25px;
@@ -141,24 +147,40 @@ button{
     </style>
 </head>
 <body>
-    <div class="background">
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <div class="container">
+        <center><h1 class="mt-5">Inscription</h1></center>
+        <!-- Formulaire d'inscription -->
+        <form method="post" action="process_inscription.php" class="mt-3">
+            <input type="hidden" id="id" name="id">
+            <div class="form-group">
+                <label for="nom">Nom :</label>
+                <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Rôle :</label>
+                <select class="form-control" name="role" id="role" required>
+                    <?php while ($rowRole = mysqli_fetch_assoc($resRole)) { ?>
+                        <option value="<?php echo $rowRole['role_id']; ?>"><?php echo $rowRole['nom']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" name="submit">S'inscrire</button>
+            </div>
+        </form>
     </div>
-    <form action="login_process.php" method="POST">
-        <h3>Connexion</h3>
-
-        <input type="hidden" id="id" name="id">
-                                <label for="email">Email utilisateur</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="form-group">
-                                <label for="password">Mot de passe</label>
-                                <input type="password" class="form-control" id="password" name="password" required autocomplete="off">
-                            </div>
-
-                            <button type="submit" name="submit"  id="submit" class="btn btn-primary">Se connecter</button>
-                            <p>Si vous n'avez pas un compte <a href="inscription.php" style="color:green">S'inscrire</a></p>
-       
-    </form>
+    <!-- Inclure Bootstrap JS (optionnel si vous n'utilisez pas de fonctionnalités JavaScript de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

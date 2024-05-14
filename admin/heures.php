@@ -50,7 +50,7 @@ include('includes/navbar.php');
                    
                     echo "<td>" . $row['nom_equipe'] . "</td>";
                     echo "<td>
-                            <a href='readHeures.php?id=".$row['heure_id']."' class='btn btn-info'>Lire</a>
+                            
                             <a href='updateHeures.php?id=" . $row['heure_id'] . "' class='btn btn-warning '>Modifier</a>
                             <a href='deleteHeures.php?id=" . $row['heure_id'] . "' class='btn btn-danger '>Supprimer</a>
                           </td>";

@@ -1,6 +1,8 @@
 <?php
 session_start();
 //include "./config.php"; 
+//$id=$_SESSION['id']; 
+//echo $id;
 ?>
 
 <!-- Sidebar -->
@@ -19,7 +21,7 @@ session_start();
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="index.php">
+        <a class="nav-link" href="admin_dashboard.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Admin_Panel</span></a>
     </li>
@@ -48,6 +50,7 @@ session_start();
                 <a class="collapse-item" href="commites.php">Commités</a>
                 <a href="heures.php" class="collapse-item">Heures_Entrainements</a>
                 <a class="collapse-item" href="sessions.php">Session_entrainement</a>
+                <a class="collapse-item" href="equipe.php">Equipe</a>
                 <a class="collapse-item" href="paiements.php">Paiements</a>
 
             </div>
@@ -81,14 +84,24 @@ session_start();
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-wrench"></i>
-            <span>Paramtres</span>
+            <span>Paramètres</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Géer Profile:</h6>
-                <a class="collapse-item" href="updateUser.php?id=<?php echo $row['utilisateur_id']?>">Modifier</a>
-                <a class="collapse-item" href="utilities-border.html">changer Password</a>
-                
+                <?php
+                include './config.php';
+                $email = $_SESSION['email_admin'];
+                $sql = "select * from utilisateurs where email='$email'";
+                $result = mysqli_query($conn, $sql);
+                $row = $result->fetch_assoc();
+                // echo $row['utilisateur_id'];              
+
+
+                ?>
+                <a class="collapse-item" href="updateUser.php?id=<?php echo $row['utilisateur_id'] ?>">Modifier Profile</a>
+                <a class="collapse-item" href="changePassword.php?id=<?php echo $row['utilisateur_id'] ?>">changer Password</a>
+
             </div>
         </div>
     </li>
@@ -119,7 +132,7 @@ session_start();
                 <i class="fa fa-bars"></i>
             </button>
 
-          
+
 
 
             <!-- Topbar Navbar -->
@@ -127,7 +140,7 @@ session_start();
 
                 <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                 <li class="nav-item dropdown no-arrow d-sm-none">
-                   
+
                     <!-- Dropdown - Messages -->
                     <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                         <form class="form-inline mr-auto w-100 navbar-search">
@@ -143,51 +156,75 @@ session_start();
                     </div>
                 </li>
 
+
+                <?php
+              
+                // Function to retrieve notifications for the current user
+                function getNotifications($userId, $conn)
+                {
+                    $notifications = array();
+                    $query = "SELECT * FROM notifications WHERE utilisateur_id = ? ORDER BY timestamp DESC";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bind_param("i", $userId);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($row = $result->fetch_assoc()) {
+                        $notifications[] = $row;
+                    }
+                    $stmt->close();
+                    return $notifications;
+                }
+
+                // Function to retrieve messages for the current user
+                function getMessages($userId, $conn)
+                {
+                    $messages = array();
+                    $query = "SELECT * FROM messages WHERE utilisateur_id = ? ORDER BY timestamp DESC";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bind_param("i", $userId);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($row = $result->fetch_assoc()) {
+                        $messages[] = $row;
+                    }
+                    $stmt->close();
+                    return $messages;
+                }
+
+                // Get the current user ID (you may need to modify this based on your authentication method)
+                $userId = 1;
+
+                // Retrieve notifications and messages for the current user
+                $notifications = getNotifications($userId, $conn);
+                $messages = getMessages($userId, $conn);
+                ?>
+
                 <!-- Nav Item - Alerts -->
                 <li class="nav-item dropdown no-arrow mx-1">
                     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell fa-fw"></i>
                         <!-- Counter - Alerts -->
-                        <span class="badge badge-danger badge-counter">3+</span>
+                        <span class="badge badge-danger badge-counter"><?php echo count($notifications); ?></span>
                     </a>
                     <!-- Dropdown - Alerts -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                         <h6 class="dropdown-header">
                             Alerts Center
                         </h6>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-primary">
-                                    <i class="fas fa-file-alt text-white"></i>
+                        <?php foreach ($notifications as $notification) : ?>
+                            <!-- Notification Item -->
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">December 12, 2019</div>
-                                <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-success">
-                                    <i class="fas fa-donate text-white"></i>
+                                <div>
+                                    <div class="small text-gray-500"><?php echo $notification['timestamp']; ?></div>
+                                    <span class="font-weight-bold"><?php echo $notification['message']; ?></span>
                                 </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">December 7, 2019</div>
-                                $290.29 has been deposited into your account!
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-warning">
-                                    <i class="fas fa-exclamation-triangle text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">December 2, 2019</div>
-                                Spending Alert: We've noticed unusually high spending for your account.
-                            </div>
-                        </a>
+                            </a>
+                        <?php endforeach; ?>
                         <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                     </div>
                 </li>
@@ -197,113 +234,58 @@ session_start();
                     <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-envelope fa-fw"></i>
                         <!-- Counter - Messages -->
-                        <span class="badge badge-danger badge-counter">7</span>
+                        <span class="badge badge-danger badge-counter"><?php echo count($messages); ?></span>
                     </a>
                     <!-- Dropdown - Messages -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
                         <h6 class="dropdown-header">
                             Message Center
                         </h6>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold">
-                                <div class="text-truncate">Hi there! I am wondering if you can help me with a problem
-                                    I've been having.</div>
-                                <div class="small text-gray-500">Emily Fowler · 58m</div>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60" alt="">
-                                <div class="status-indicator"></div>
-                            </div>
-                            <div>
-                                <div class="text-truncate">I have the photos that you ordered last month, how would you
-                                    like them sent to you?</div>
-                                <div class="small text-gray-500">Jae Chun · 1d</div>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60" alt="">
-                                <div class="status-indicator bg-warning"></div>
-                            </div>
-                            <div>
-                                <div class="text-truncate">Last month's report looks great, I am very happy with the
-                                    progress so far, keep up the good work!</div>
-                                <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div>
-                                <div class="text-truncate">Am I a good boy? The reason I ask is because someone told me
-                                    that people say this to all dogs, even if they aren't good...</div>
-                                <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                            </div>
-                        </a>
+                        <?php foreach ($messages as $message) : ?>
+                            <!-- Message Item -->
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <!-- Include message details here -->
+                                <div class="font-weight-bold">
+                                    <div class="text-truncate"><?php echo $message['message_content']; ?></div>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
                         <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                     </div>
                 </li>
+
 
                 <div class="topbar-divider d-none d-sm-block"></div>
 
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
 
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 
+                        <?php
+                        // Récupération du prénom et du nom administrateur
+                        $email = $_SESSION['email_admin'];
+                        //echo $email;
+                        $query = "SELECT * FROM utilisateurs WHERE email='$email'";
+                        $res = mysqli_query($conn, $query);
+                        if (mysqli_num_rows($res) > 0) {
+                            $row = mysqli_fetch_assoc($res);
+                            echo $row['nom'];
+                            //echo $row['utilisateur_id'];
 
-                        </span>
-                        <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                        }
+                        ?>
+
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            <?php
 
-
-                            $email = $_SESSION['email_admin'];
-                            //echo $email;
-
-                            //echo $nom;
-                            // Connexion à la base de données
-                            include './config.php';
-                            // requete sql pour recupérer id role from pour le nom affiché
-                            //$password=$_SESSION['password'];
-                            //$nom=$_POST['nom'];
-                            // Requête SQL
-                            $sql = "SELECT * from utilisateurs where email='$email' ";
-                            $result = mysqli_query($conn, $sql);
-
-                            // Vérification des résultats de la requête
-                            if (mysqli_num_rows($result) > 0) {
-                                // Affichage des résultats
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo $row['nom'];
-                                }
-                            } else {
-                                // Gestion des erreurs
-                                echo "Erreur de requête : " . mysqli_error($conn);
-                            }
-
-
-
-                            ?>
-                        </a>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="updateUser.php?id='<?php echo $row['utilisateur_id']; ?>'">
                             <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Settings
+                            Profile
                         </a>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="log.php">
                             <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                             Activity Log
                         </a>

@@ -1,6 +1,6 @@
 <?php
-include('includes/header.php'); 
-include('includes/navbar.php'); 
+include ('includes/header.php');
+include ('includes/navbar.php');
 ?>
 
 
@@ -41,7 +41,7 @@ include('includes/navbar.php');
                     // Fetch the result as an associative array
                     $row = $result->fetch_assoc();
                     $totalUsers = $row['total_users'];
-                    echo  $totalUsers;
+                    echo $totalUsers;
                   } else {
                     echo "No registered users found.";
                   }
@@ -59,8 +59,8 @@ include('includes/navbar.php');
         </div>
       </div>
     </div>
-     <!-- Earnings (Monthly) Card Example -->
-     <div class="col-xl-3 col-md-6 mb-4">
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -81,7 +81,7 @@ include('includes/navbar.php');
                     // Fetch the result as an associative array
                     $row = $result->fetch_assoc();
                     $totalParents = $row['total_parent'];
-                    echo  $totalParents;
+                    echo $totalParents;
                   } else {
                     echo "No registered parents found.";
                   }
@@ -99,8 +99,8 @@ include('includes/navbar.php');
         </div>
       </div>
     </div>
-     <!-- Earnings (Monthly) Card Example -->
-     <div class="col-xl-3 col-md-6 mb-4">
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -121,7 +121,7 @@ include('includes/navbar.php');
                     // Fetch the result as an associative array
                     $row = $result->fetch_assoc();
                     $totalAthletes = $row['total_athletes'];
-                    echo  $totalAthletes;
+                    echo $totalAthletes;
                   } else {
                     echo "No registered athlètes found.";
                   }
@@ -139,8 +139,8 @@ include('includes/navbar.php');
         </div>
       </div>
     </div>
- <!-- Earnings (Monthly) Card Example -->
- <div class="col-xl-3 col-md-6 mb-4">
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -161,7 +161,7 @@ include('includes/navbar.php');
                     // Fetch the result as an associative array
                     $row = $result->fetch_assoc();
                     $totalEntraineur = $row['total_entraineur'];
-                    echo  $totalEntraineur;
+                    echo $totalEntraineur;
                   } else {
                     echo "No registered entraineur found.";
                   }
@@ -185,8 +185,37 @@ include('includes/navbar.php');
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Paiement (Annuel)</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                <?php
+                // Include the database connection file
+                include 'config.php';
+
+                // Initialiser la somme totale des paiements à zéro
+                $totalPaiement = 0;
+
+                // Requête SQL pour sélectionner tous les paiements
+                $sql = "SELECT montant FROM paiements";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                  // Parcourir chaque paiement et accumuler les montants
+                  while ($row = $result->fetch_assoc()) {
+                    $montant = $row['montant'];
+                    $totalPaiement += $montant;
+                  }
+
+                  // Afficher la somme totale des paiements
+                  echo "<h4>Total_Paiement : </h4>" . $totalPaiement;
+                } else {
+                  echo "Aucun paiement enregistré.";
+                }
+
+                // Fermer la connexion à la base de données
+                $conn->close();
+                ?>
+
+              </div>
             </div>
             <div class="col-auto">
               <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -209,7 +238,8 @@ include('includes/navbar.php');
                 </div>
                 <div class="col">
                   <div class="progress progress-sm mr-2">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
+                      aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
               </div>
@@ -314,7 +344,7 @@ include('includes/navbar.php');
           while ($row = $result->fetch_assoc()) {
             $date = date('N', strtotime($row['date'])); // Récupérer le numéro du jour de la semaine (1 pour lundi, 2 pour mardi, etc.)
             $heure = intval(substr($row['heure'], 0, 2)); // Récupérer l'heure en tant que nombre entier
-
+        
             // Construire le contenu du popover
             $content = "
                     <b>Date:</b> {$row['date']}<br><b>Entraîneur:</b> {$row['prenom_entraineur']} {$row['nom_entraineur']}
@@ -345,26 +375,26 @@ include('includes/navbar.php');
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Activer les popovers au survol de la classe 'seance'
       $('.seance').popover({
         html: true
       });
 
       // Cacher les autres popovers lorsqu'on survole une case
-      $('.seance').mouseenter(function() {
+      $('.seance').mouseenter(function () {
         // Masquer tous les popovers, sauf celui sur lequel on survole
         $('.seance').not(this).popover('hide');
       });
 
       // Gestionnaire d'événement pour le bouton de modification
-      $(document).on('click', '.btn-primary', function() {
+      $(document).on('click', '.btn-primary', function () {
         // Insérez le code pour la modification ici
         console.log('Bouton de modification cliqué');
       });
 
       // Gestionnaire d'événement pour le bouton de suppression
-      $(document).on('click', '.btn-danger', function() {
+      $(document).on('click', '.btn-danger', function () {
         // Insérez le code pour la suppression ici
         console.log('Bouton de suppression cliqué');
       });
@@ -380,6 +410,6 @@ include('includes/navbar.php');
 
 
   <?php
-  include('includes/scripts.php');
-  include('includes/footer.php');
+  include ('includes/scripts.php');
+  include ('includes/footer.php');
   ?>

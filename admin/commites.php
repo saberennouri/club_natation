@@ -40,7 +40,7 @@ include('includes/navbar.php');
                     <td>".$row['responsable_nom']."</td>
                     <td>".$row['responsable_email']."</td>
                     <td>
-                    <a href='readCommite.php?id=".$row['comite_id']."' class='btn btn-info'>Lire</a>
+                  
                     <a href='updateCommite.php?id=".$row['comite_id']."' class='btn btn-warning'>Modifier</a>
                     <a href='deleteCommite.php?id=".$row['comite_id']."' class='btn btn-danger'>Supprimer</a>
                     </td>

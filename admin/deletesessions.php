@@ -1,4 +1,7 @@
-<?php
+
+<?php 
+include('includes/header.php'); 
+include('includes/navbar.php');
 include 'config.php';
 
 // Vérifier si l'ID de la session est passé en paramètre
@@ -25,33 +28,27 @@ if(isset($_GET['id'])) {
             exit(); // Terminer le script après la redirection
         }
 ?>
-<?php 
-    include('includes/header.php'); 
-    include('includes/navbar.php');
-  ?>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supprimer la session</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Supprimer la session</h2>
-        <div class="card">
-            <div class="card-body">
-                <p>Êtes-vous sûr de vouloir supprimer cette session?</p>
-                <p><strong>Date de la session:</strong> <?php echo $row['date']; ?></p>
-                <p><strong>Équipe:</strong> <?php echo getNomEquipe($conn, $row['equipe_id']); ?></p>
-               
-                <form method="POST">
-                    <button type="submit" name="supprimer" class="btn btn-danger">Supprimer</button>
-                    <a href="sessions.php" class="btn btn-secondary">Annuler</a>
-                </form>
-            </div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Supprimer la session</h2>
+    <div class="card">
+        <div class="card-body">
+            <p>Êtes-vous sûr de vouloir supprimer cette session?</p>
+            <p><strong>Date de la session:</strong> <?php echo $row['date']; ?></p>
+            <p><strong>Équipe:</strong> <?php echo getNomEquipe($conn, $row['equipe_id']); ?></p>
+           
+            <form method="POST">
+                <button type="submit" name="supprimer" class="btn btn-danger">Supprimer</button>
+                <a href="sessions.php" class="btn btn-secondary">Annuler</a>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<?php
+include('includes/scripts.php'); 
+include('includes/footer.php'); 
+?>
 <?php
     } else {
         echo "Aucune session trouvée avec cet ID.";
@@ -59,9 +56,6 @@ if(isset($_GET['id'])) {
 } else {
     echo "ID de la session non spécifié.";
 }
-
-include('includes/scripts.php'); 
-include('includes/footer.php'); 
 
 // Fonction pour récupérer le nom de l'équipe à partir de son ID
 function getNomEquipe($conn, $equipe_id) {
