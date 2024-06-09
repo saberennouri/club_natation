@@ -114,7 +114,7 @@
     <div class="container mt-5">
     <h2 style="text-align:center">Espace Parents</h2>  
     <p>Bienvenue dans notre club</p>  
-    <a href="./admin/login.php">Se connecter</a>|<a href="./admin/">S'inscrire</a>                            
+    <a href="./admin/index.php">Se connecter</a>|<a href="./admin/inscription.php">S'inscrire</a>                            
     <div>
     <!--==============================row_2=================================-->   
 

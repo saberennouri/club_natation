@@ -20,6 +20,8 @@ if (isset($_GET['id'])) {
         // Vérifier si le formulaire de mise à jour a été soumis
         if (isset($_POST['modifier'])) {
             $nom = $_POST['nom'];
+            $prenom = $_POST['prenom'];
+            $tel = $_POST['telephone'];
             $email = $_POST['email'];
             $motdepasse = $_POST['mot_de_passe'];
 
@@ -33,7 +35,7 @@ if (isset($_GET['id'])) {
             $role_id = $row1['role_id'];
 
             // Requête pour mettre à jour les informations d'utilisateur
-            $update_query = "UPDATE utilisateurs SET nom='$nom', email='$email', 
+            $update_query = "UPDATE utilisateurs SET nom='$nom',prenom='$prenom',telephone='$tel', email='$email', 
             mot_de_passe='$motdepasse', role_id=$role_id
             WHERE utilisateur_id=$utilisateur_id";
             $update_result = mysqli_query($conn, $update_query);
@@ -46,12 +48,21 @@ if (isset($_GET['id'])) {
         ?>
 
         <div class="container mt-5">
-            <h2 class="mb-4">Modifier un utilisateur</h2>
+            <center><h2 class="mb-4">Interface Modification</h2></center>
             <form method="post">
                 <div class="form-group">
                     <label for="nom">Nom :</label>
                     <input type="text" class="form-control" id="nom" name="nom" value="<?php echo $row['nom'] ?>">
                 </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom :</label>
+                    <input type="text" class="form-control" id="prenom" name="prenom" value="<?php echo $row['prenom'] ?>">
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Télephone :</label>
+                    <input type="text" class="form-control" id="telephone" name="telephone" value="<?php echo $row['telephone'] ?>">
+                </div>               
+
                 <div class="form-group">
                     <label for="email">Email :</label>
                     <input type="email" class="form-control" id="email" name="email" value="<?php echo $row['email'] ?>">
@@ -64,7 +75,8 @@ if (isset($_GET['id'])) {
 
                 <div class="form-group">
                     <label for="role">Rôle :</label>
-                    <select class="form-control" id="role" name="role" required>
+                    <select class="form-control" id="role" name="role">
+                    <option>Selectionner role</option>
                         <?php
                         // Connexion à la base de données
                         require_once 'config.php';
@@ -74,6 +86,7 @@ if (isset($_GET['id'])) {
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
+                                
                                 echo "<option>" . $row['nom'] . "</option>";
                             }
                         } else {

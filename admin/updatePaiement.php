@@ -50,7 +50,7 @@ if (isset($_GET['update_id'])) {
                             $result_athletes = mysqli_query($conn, $sql_athletes);
                             if (mysqli_num_rows($result_athletes) > 0) {
                                 while ($row_athlete = mysqli_fetch_assoc($result_athletes)) {
-                                    echo "<option value='" . $row_athlete['athlete_id'] . "'>" . $row_athlete['nom_complet'] . "</option>";
+                                    echo "<option value='" . $row_athlete['athlete_id'] . "' " . ($row_athlete['athlete_id'] == $row['adhesion_id'] ? 'selected' : '') . ">" . $row_athlete['nom_complet'] . "</option>";
                                 }
                             }
                             ?>
@@ -70,11 +70,20 @@ if (isset($_GET['update_id'])) {
                         <label for="payment_method">Payment Method</label>
                         <input type="text" class="form-control" id="payment_method" name="payment_method" value="<?php echo $row['payment_method']; ?>">
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="montant_paye">Montant Payé</label>
+                        <input type="text" class="form-control" id="montant_paye" name="montant_paye" value="<?php echo $row['montantPayer']; ?>">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="montant_reste">Montant Restant</label>
+                        <input type="text" class="form-control" id="montant_reste" name="montant_reste" readonly value="<?php echo $row['montantReste']; ?>">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary" name="modifier">Modifier Paiement</button>
+                <a href="paiements.php" class="btn btn-primary">Annuler</a>
             </form>
         </div>
-        <?php
+<?php
     } else {
         echo "Aucun paiement trouvé avec cet ID.";
     }
@@ -85,3 +94,17 @@ if (isset($_GET['update_id'])) {
 include('./includes/scripts.php');
 include('./includes/footer.php');
 ?>
+<!-- Script JavaScript pour calculer le montant restant -->
+<script>
+            // Fonction pour calculer le montant restant
+            function calculateRemainingAmount() {
+                var totalAmount = parseFloat(document.getElementById('montant').value);
+                var paidAmount = parseFloat(document.getElementById('montant_paye').value);
+                var remainingAmount = totalAmount - paidAmount;
+                // Mettre à jour la valeur de l'input 'montant_reste'
+                document.getElementById('montant_reste').value = remainingAmount.toFixed(2);
+            }
+
+            // Écouter les changements dans le montant payé et recalculer le montant restant
+            document.getElementById('montant_paye').addEventListener('input', calculateRemainingAmount);
+        </script>

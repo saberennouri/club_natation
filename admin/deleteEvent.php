@@ -1,4 +1,6 @@
 <?php
+include('includes/header.php'); 
+include('includes/navbar.php'); 
 include 'config.php';
 
 // Vérifier si l'ID du evenement est passé en paramètre
@@ -21,11 +23,10 @@ if(isset($_GET['id'])) {
             if(!$delete_result) {
                 die("Erreur de suppression d'\evenement: " . mysqli_error($conn));
             }
-            header("Location: evenements.php");
+            echo "<script>window.location.href='evenements.php'</script>";
         }
 ?>
-<?php include('includes/header.php'); 
-include('includes/navbar.php');  ?>
+
     <div class="container mt-5">
         <h2 class="mb-4">Supprimer l'evenement</h2>
         <div class="card">

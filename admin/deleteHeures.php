@@ -1,4 +1,6 @@
-<?php
+<?php 
+include('includes/header.php'); 
+include('includes/navbar.php');
 include 'config.php';
 
 // Vérifier si l'ID du heures est passé en paramètre
@@ -21,13 +23,10 @@ if(isset($_GET['id'])) {
             if(!$delete_result) {
                 die("Erreur de suppression du heures: " . mysqli_error($conn));
             }
-            header("Location: heures.php");
+           echo '<script>window.location.href="heures.php"</script>';
         }
 ?>
-<?php 
-    include('includes/header.php'); 
-    include('includes/navbar.php');
-  ?>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supprimer le heures</title>

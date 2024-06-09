@@ -20,11 +20,12 @@ if(isset($_GET['id'])) {
             $nom = $_POST['nom'];
             $date = $_POST['date_evenement'];
             $lieu = $_POST['lieu'];
-            $motdepasse= $_POST['mot_de_passe'];
+            $heuredebut= $_POST['heuredebut'];
+            $heurefin=$_POST['heurefin'];
            
 
             // Requête pour mettre à jour les informations d'evenement
-            $update_query = "UPDATE evenements SET nom='$nom',date_evenement='$date',lieu='$lieu'
+            $update_query = "UPDATE evenements SET nom='$nom',date_evenement='$date',lieu='$lieu',heure_debut='$heuredebut',heure_fin='$heurefin'
              WHERE evenement_id='$evenement_id'";
             $update_result = mysqli_query($conn, $update_query);
            
@@ -50,7 +51,13 @@ if(isset($_GET['id'])) {
                 <label for="motdepasse">Lieu :</label>
                 <input type="text" class="form-control" id="lieu" name="lieu" value="<?php echo $row['lieu']?>">
             </div>
+            <div class="form-group">
+                <label for="heuredebut">Heure Début :</label>
+                <input type="time" name="heuredebut" id="heuredebut" value="<?php echo $row['heure_debut']?>">
             
+                <label for="heurefin">Heure Fin :</label>
+                <input type="time" name="heurefin" id="heurefin" value="<?php echo $row['heure_fin']?>">
+            </div>  
            
             <button type="submit" name="modifier" class="btn btn-primary">Modifier</button>
             <a href="evenements.php" class="btn btn-secondary">Annuler</a>

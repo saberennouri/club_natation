@@ -8,32 +8,20 @@ if(isset($_POST['submit'])) {
     $nom = $_POST['nom'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $role_id = $_POST['role'];
-
+     $prenom=$_POST['prenom'];
+     $telephone=$_POST['telephone'] ;
     // Hasher le mot de passe
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    //$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Préparer la requête d'insertion
-    $insert_query = "INSERT INTO utilisateurs (nom, email, mot_de_passe, role_id) VALUES (?, ?, ?, ?)";
+    // Préparer la requête d'insertion pour la table utilisateurs
+    $insert_user_query = "INSERT INTO utilisateurs (nom,prenom, email,telephone, mot_de_passe) 
+    VALUES ('$nom', '$prenom', '$email','$telephone' ,'$password')";
 
-    // Préparer la déclaration SQL
-    $stmt = mysqli_prepare($conn, $insert_query);
+    // Exécuter la requête pour insérer dans la table utilisateurs
+    $result_user = mysqli_query($conn, $insert_user_query);
+    header("location:index.php");
 
-    // Lier les paramètres
-    mysqli_stmt_bind_param($stmt, "sssi", $nom, $email, $hashed_password, $role_id);
-
-    // Exécuter la requête
-    $result = mysqli_stmt_execute($stmt);
-
-    if($result) {
-        header("location:index.php");
-    } else {
-        echo "Erreur lors de l'inscription : " . mysqli_error($conn);
-    }
-
-    // Fermer la déclaration
-    mysqli_stmt_close($stmt);
+    // Fermer la connexion à la base de données
+    mysqli_close($conn);
 }
 
-// Fermer la connexion à la base de données
-mysqli_close($conn);

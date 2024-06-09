@@ -1,6 +1,6 @@
 <?php
-include('includes/header.php'); 
-include('includes/navbar.php'); 
+include('includes/header.php');
+include('includes/navbar.php');
 ?>
 
 
@@ -10,10 +10,9 @@ include('includes/navbar.php');
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
                 <th>Prénom</th>
-                <th>Date de Naissance</th>
+                <th>Email</th>
                 <th>Numéro de télèphone</th>
                 <th style="text-align:center">Actions</th>
             </tr>
@@ -24,22 +23,20 @@ include('includes/navbar.php');
             require_once 'config.php';
 
             // Sélection des membres
-            $sql = "SELECT * FROM parents";
+            $sql = "SELECT * FROM utilisateurs where role_id='2'";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
+                while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                   
-                    echo "<td>".$row['parent_id']."</td>";
-                    echo "<td>".$row['prenom']."</td>";
-                    echo "<td>".$row['nom']."</td>";
-                    echo "<td>".$row['email']."</td>";
-                    echo "<td>".$row['numero_telephone']."</td>";
+                    echo "<td>" . $row['prenom'] . "</td>";
+                    echo "<td>" . $row['nom'] . "</td>";
+                    echo "<td>" . $row['email'] . "</td>";
+                    echo "<td>" . $row['telephone'] . "</td>";
                     echo "<td>
                            
-                            <a href='updateParents.php?id=".$row['parent_id']."' class='btn btn-warning'>Modifier</a>
-                            <a href='deleteParents.php?id=".$row['parent_id']."' class='btn btn-danger'>Supprimer</a>
+                            <a href='updateUser.php?id=" . $row['utilisateur_id'] . "' class='btn btn-warning'>Modifier</a>
+                            <a href='deleteUser.php?id=" . $row['utilisateur_id'] . "' class='btn btn-danger'>Supprimer</a>
                           </td>";
                     echo "</tr>";
                 }
@@ -49,7 +46,7 @@ include('includes/navbar.php');
             ?>
         </tbody>
     </table>
-    </div>
+</div>
 
 <?php
 include('includes/scripts.php');

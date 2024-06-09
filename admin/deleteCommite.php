@@ -1,6 +1,7 @@
 <?php
 include 'config.php';
-
+ include('includes/header.php'); 
+include('includes/navbar.php'); 
 // Vérifier si l'ID du comite est passé en paramètre
 if(isset($_GET['id'])) {
     $comite_id = $_GET['id'];
@@ -21,11 +22,10 @@ if(isset($_GET['id'])) {
             if(!$delete_result) {
                 die("Erreur de suppression d'\comite: " . mysqli_error($conn));
             }
-            header("Location: comites.php");
+            header("Location: commites.php");
         }
 ?>
-<?php include('includes/header.php'); 
-include('includes/navbar.php');  ?>
+
     <div class="container mt-5">
         <h2 class="mb-4">Supprimer l'comite</h2>
         <div class="card">
@@ -53,4 +53,4 @@ include('includes/navbar.php');  ?>
 include('includes/scripts.php'); 
 include('includes/footer.php'); 
 
-?>
+

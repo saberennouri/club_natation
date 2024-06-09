@@ -87,46 +87,10 @@
         <div class="container">
             <div class="row blogpage">
                 <article class="col-lg-8 col-md-8 col-sm-8"> 
-                    <h2>Resultats</h2>
-                    <div class="container mt-5">
-                        <h2>Détails du Membre</h2>
-                        <a href="index.php" class="btn btn-secondary my-3">Retour</a>
-                        <?php
-                        // Connexion à la base de données
-                        require_once 'config.php';
-                    
-                        // Vérification si l'identifiant du membre est défini
-                        if(isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                    
-                            // Sélection des détails du membre
-                            $sql = "SELECT * FROM Membres WHERE ID_Membre = $id";
-                            $result = $conn->query($sql);
-                    
-                            if ($result->num_rows > 0) {
-                                $row = $result->fetch_assoc();
-                                echo "<table class='table'>";
-                                echo "<tr><th>ID Membre</th><td>".$row['ID_Membre']."</td></tr>";
-                                echo "<tr><th>Nom</th><td>".$row['Nom']."</td></tr>";
-                                echo "<tr><th>Prénom</th><td>".$row['Prénom']."</td></tr>";
-                                echo "<tr><th>Date de Naissance</th><td>".$row['Date_de_naissance']."</td></tr>";
-                                echo "<tr><th>Adresse</th><td>".$row['Adresse']."</td></tr>";
-                                echo "<tr><th>Numéro de téléphone</th><td>".$row['Numéro_de_téléphone']."</td></tr>";
-                                echo "<tr><th>Adresse email</th><td>".$row['Adresse_email']."</td></tr>";
-                                echo "<tr><th>Date d'inscription</th><td>".$row['Date_d_inscription']."</td></tr>";
-                                echo "</table>";
-                            } else {
-                                echo "Aucun membre trouvé avec cet ID.";
-                            }
-                        } else {
-                            echo "ID du membre non spécifié.";
-                        }
-                        ?>
-                    </div>
-                    
+                   
+                   
                 </article>
                 <article class="col-lg-4 col-md-4 col-sm-4"> 
-                              
                 </article>                
             </div>
         </div>

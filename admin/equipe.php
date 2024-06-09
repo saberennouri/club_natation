@@ -10,14 +10,13 @@ include "./includes/navbar.php";
 <div class="container mt-5">
     <h2>Gestion des équipes du Club Natation</h2>
     <a href="createEquipe.php" class="btn btn-primary my-3">Ajouter équipe</a>
-    <table class="table">
+    <table class="table table-hover border">
         <thead>
             <tr> 
                 <th>ID</th>                
                 <th>Nom</th>
-                <th>Description</th>
-                <th>Athelete</th>
-                <th style="text-align:center">Actions</th>
+                <th>Description</th>                
+                <th >Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -31,15 +30,12 @@ include "./includes/navbar.php";
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $id=$row['athlete_id'];
-                    $sqlathlete="select prenom,nom from athletes where athlete_id=$id";
-                    $resultathlete = $conn->query($sqlathlete);
-                    $rowathlete=mysqli_fetch_assoc($resultathlete);
+                  
                     echo "<tr>
                     <td>".$row['id_equipe']."</td>
                     <td>".$row['nom']."</td>
                     <td>".$row['description']."</td>                    
-                    <td>".$rowathlete['prenom']." ".$rowathlete['nom']."</td>
+                   
                     <td>
                     
                     <a href='updateEquipe.php?id=".$row['id_equipe']."' class='btn btn-warning'>Modifier</a>

@@ -10,6 +10,7 @@
                     <li class="nav-item">
                         <p style="margin-right: 2px;" class="btn btn-outline-success">
                             <?php
+                            include "./config.php";
                             // Récupération du prénom et du nom du parent
                             $email = $_SESSION['email_parent'];
                            //echo $email;

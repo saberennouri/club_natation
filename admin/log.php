@@ -4,15 +4,6 @@ include "./includes/header.php";
 include "./includes/navbar.php";
 
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['email_admin'])) {
-    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: login.php");
-    exit;
-}
-
-
-
 ?>
 
 <div class="container">

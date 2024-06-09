@@ -1,4 +1,6 @@
 <?php
+include('includes/header.php');
+include('includes/navbar.php');
 include 'config.php';
 
 // Vérifier si l'ID du utilisateur est passé en paramètre
@@ -19,30 +21,26 @@ if(isset($_GET['id'])) {
             $delete_query = "DELETE FROM utilisateurs WHERE utilisateur_id='$utilisateur_id'";
             $delete_result = mysqli_query($conn, $delete_query);
             if(!$delete_result) {
-                die("Erreur de suppression d'\athlète: " . mysqli_error($conn));
+                die("Erreur de suppression d'utilisateur: " . mysqli_error($conn));
             }
-            header("Location: utilisateurs.php");
+            echo "<script>window.location.href='utilisateurs.php'</script>";
         }
 ?>
-<?php include('includes/header.php'); 
-include('includes/navbar.php');  ?>
-    <div class="container mt-5">
-        <h2 class="mb-4">Supprimer l'utilisateur</h2>
-        <div class="card">
-            <div class="card-body">
-                <p>Êtes-vous sûr de vouloir supprimer cet utilisateur?</p>
-                <p><strong>Nom:</strong> <?php echo  $row['nom']; ?></p>
-                
-                <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
-                <form method="POST">
-                    <button type="submit" name="supprimer" class="btn btn-danger">Supprimer</button>
-                    <a href="utilisateurs.php" class="btn btn-secondary">Annuler</a>
-                </form>
-            </div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Supprimer l'utilisateur</h2>
+    <div class="card">
+        <div class="card-body">
+            <p>Êtes-vous sûr de vouloir supprimer cet utilisateur?</p>
+            <p><strong>Nom:</strong> <?php echo $row['nom']; ?></p>
+            <p><strong>Email:</strong> <?php echo $row['email']; ?></p>
+            <form method="POST">
+                <button type="submit" name="supprimer" class="btn btn-danger">Supprimer</button>
+                <a href="utilisateurs.php" class="btn btn-secondary">Annuler</a>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</div>
 <?php
     } else {
         echo "Aucun utilisateur trouvé avec cet ID.";
@@ -50,7 +48,6 @@ include('includes/navbar.php');  ?>
 } else {
     echo "ID d'utilisateur non spécifié.";
 }
-include('includes/scripts.php'); 
-include('includes/footer.php'); 
-
+include('includes/scripts.php');
+include('includes/footer.php');
 ?>
