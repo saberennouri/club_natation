@@ -41,7 +41,7 @@ include('config.php');
 </script>
 
 <div class="container mt-5">
-    <h2>Gestion des Adhésions</h2>
+    <h2>Liste des Adhésions</h2>
     <a href="addAdhesion.php" class="btn btn-primary my-3">Ajouter adhésion</a>
     <table class="table table-bordered">
         <thead>
@@ -50,6 +50,7 @@ include('config.php');
                 <th>Nom Athlète</th>
                 <th>Date de Début</th>
                 <th>Date de Fin</th>
+                <th>Type Adhésion</th>
                 <th>Statut</th>
                 <th style='text-align:center'>Actions</th>
             </tr>
@@ -72,6 +73,7 @@ include('config.php');
                     echo "<td>".$rowathlete['nom']."_".$rowathlete['prenom']."</td>";
                     echo "<td>".$row['date_debut']."</td>";
                     echo "<td>".$row['date_fin']."</td>";
+                    echo "<td>".$row['typeAdhesion']."</td>";
                     echo "<td onclick=\"modifierStatut(".$row['adhesion_id'].")\">".$row['statut']."</td>";
                     echo "<td>
                  

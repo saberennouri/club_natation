@@ -3,38 +3,28 @@ include 'config.php';
 
 // Ajouter un utilisateur
 if (isset($_POST['ajouter'])) {
-
+/**    INSERT INTO `utilisateurs`(`utilisateur_id`, `prenom`, `telephone`, `nom`, `email`, `mot_de_passe`, `role_id`)
+ *  VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]') */
     // Récupération des données du formulaire
+   
     $nom = $_POST['nom'];
+    $prenom=$_POST['prenom'];
+    $telephone=$_POST['telephone'];
     $email = $_POST['email'];
     $mdp = $_POST['mot_de_passe'];
     $role_name = $_POST['role']; // Récupérez le nom du rôle à partir du formulaire
-
-
-
-
-    // Requête pour récupérer l'ID du rôle à partir de son nom
-    $getRoleIdQuery = "SELECT role_id FROM roles WHERE nom = '$role_name'";
-    $result = $conn->query($getRoleIdQuery);
-
-    if ($result->num_rows > 0) {
-        // Récupération de l'ID du rôle
-        $row = $result->fetch_assoc();
-        $role_id = $row["role_id"];
-
-        // Requête d'insertion de l'utilisateur
-        $insertUserQuery = "INSERT INTO utilisateurs (nom,email,mot_de_passe, role_id) VALUES ('$nom','$email','$mdp', '$role_id')";
-
-        if ($conn->query($insertUserQuery) === TRUE) {
-            header('Location:utilisateurs.php');
-        } else {
-            echo "Erreur lors de la création de l'utilisateur: " . $conn->error;
+     
+     $idrole="SELECT `role_id`FROM `roles` WHERE nom='$role_name'";
+     $resroleId=mysqli_query($conn,$idrole);
+     $roleId=mysqli_fetch_assoc($resroleId);
+     $id= $roleId['role_id'];
+     // insert data to table utilisateur
+     $insertUser="insert into utilisateurs(`prenom`, `telephone`, `nom`, `email`, `mot_de_passe`, `role_id`) 
+     VALUES ('$prenom','$telephone','$nom','$email','$mdp','$id')";
+     $res=mysqli_query($conn,$insertUser);
+     if($res){
+        header("location:utilisateurs.php");
         }
-    } else {
-        echo "Le rôle spécifié n'existe pas";
+        else{ echo "echec insertion utilisateur";
+        }
     }
-
-    // Fermeture de la connexion
-    $conn->close();
-}
-?>

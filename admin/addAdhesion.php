@@ -6,56 +6,64 @@ include('includes/navbar.php');
 include('config.php');
 
 // Initialiser les variables et les messages d'erreur
-$date_debut = $date_fin = $statut = $athlete_id = "";
-$date_debut_err = $date_fin_err = $statut_err = $athlete_id_err = "";
+$date_debut = $date_fin = $statut = $athlete_id = $typeAdhesion = "";
+$date_debut_err = $date_fin_err = $statut_err = $athlete_id_err = $typeAdhesion_err = "";
 
 // Traitement du formulaire lorsqu'il est soumis
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Valider la date de début
-    if(empty(trim($_POST["date_debut"]))) {
+    if (empty(trim($_POST["date_debut"]))) {
         $date_debut_err = "Veuillez entrer une date de début.";
     } else {
         $date_debut = trim($_POST["date_debut"]);
     }
-    
+
     // Valider la date de fin
-    if(empty(trim($_POST["date_fin"]))) {
+    if (empty(trim($_POST["date_fin"]))) {
         $date_fin_err = "Veuillez entrer une date de fin.";
     } else {
         $date_fin = trim($_POST["date_fin"]);
     }
 
+    // Valider le type d'adhésion
+    if (empty(trim($_POST["adhesion_type"]))) {
+        $typeAdhesion_err = "Veuillez choisir un type.";
+    } else {
+        $typeAdhesion = trim($_POST["adhesion_type"]);
+    }
+
     // Valider le statut
-    if(empty(trim($_POST["statut"]))) {
+    if (empty(trim($_POST["statut"]))) {
         $statut_err = "Veuillez entrer un statut.";
     } else {
         $statut = trim($_POST["statut"]);
     }
 
     // Valider l'ID de l'athlète
-    if(empty(trim($_POST["athlete_id"]))) {
+    if (empty(trim($_POST["athlete_id"]))) {
         $athlete_id_err = "Veuillez sélectionner un athlète.";
     } else {
         $athlete_id = trim($_POST["athlete_id"]);
     }
 
     // Vérifier s'il n'y a pas d'erreurs de saisie
-    if(empty($date_debut_err) && empty($date_fin_err) && empty($statut_err) && empty($athlete_id_err)) {
+    if (empty($date_debut_err) && empty($date_fin_err) && empty($statut_err) && empty($typeAdhesion_err) && empty($athlete_id_err)) {
         // Préparer une instruction d'insertion SQL
-        $sql = "INSERT INTO adhesion (athlete_id, date_debut, date_fin, statut) VALUES (?, ?, ?, ?)";
-        
-        if($stmt = mysqli_prepare($conn, $sql)) {
+        $sql = "INSERT INTO Adhesions (athlete_id, date_debut, date_fin, typeAdhesion, statut) VALUES (?, ?, ?, ?, ?)";
+
+        if ($stmt = mysqli_prepare($conn, $sql)) {
             // Liage des variables à la déclaration préparée en tant que paramètres
-            mysqli_stmt_bind_param($stmt, "isss", $param_athlete_id, $param_date_debut, $param_date_fin, $param_statut);
-            
+            mysqli_stmt_bind_param($stmt, "issss", $param_athlete_id, $param_date_debut, $param_date_fin, $param_typeAdhesion, $param_statut);
+
             // Paramétrage des paramètres
             $param_athlete_id = $athlete_id;
             $param_date_debut = $date_debut;
             $param_date_fin = $date_fin;
+            $param_typeAdhesion = $typeAdhesion;
             $param_statut = $statut;
-            
+
             // Tentative d'exécution de la déclaration préparée
-            if(mysqli_stmt_execute($stmt)) {
+            if (mysqli_stmt_execute($stmt)) {
                 // Redirection vers la page des adhésions après l'ajout réussi
                 header("location: adhesions.php");
                 exit;
@@ -83,10 +91,10 @@ ob_end_flush();
                 <option value="">Sélectionner un athlète</option>
                 <?php
                 // Récupérer les noms des athlètes depuis la base de données
-                $sql_athletes = "SELECT athlete_id, CONCAT(nom, ' ', prenom) AS nom_complet FROM athletes";
+                $sql_athletes = "SELECT athlete_id, CONCAT(nom, ' ', prenom) AS nom_complet FROM Athletes";
                 $result_athletes = mysqli_query($conn, $sql_athletes);
-                if(mysqli_num_rows($result_athletes) > 0) {
-                    while($row_athlete = mysqli_fetch_assoc($result_athletes)) {
+                if (mysqli_num_rows($result_athletes) > 0) {
+                    while ($row_athlete = mysqli_fetch_assoc($result_athletes)) {
                         echo "<option value='" . $row_athlete['athlete_id'] . "'>" . $row_athlete['nom_complet'] . "</option>";
                     }
                 }
@@ -96,13 +104,30 @@ ob_end_flush();
         </div>
         <div class="form-group">
             <label>Date de Début</label>
-            <input type="text" name="date_debut" class="form-control <?php echo (!empty($date_debut_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $date_debut; ?>">
+            <input type="date" name="date_debut" class="form-control <?php echo (!empty($date_debut_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $date_debut; ?>">
             <span class="invalid-feedback"><?php echo $date_debut_err; ?></span>
         </div>
         <div class="form-group">
             <label>Date de Fin</label>
-            <input type="text" name="date_fin" class="form-control <?php echo (!empty($date_fin_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $date_fin; ?>">
+            <input type="date" name="date_fin" class="form-control <?php echo (!empty($date_fin_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $date_fin; ?>">
             <span class="invalid-feedback"><?php echo $date_fin_err; ?></span>
+        </div>
+        <div class="form-group">
+            <label>Type Adhésion</label>
+            <select name="adhesion_type" class="form-control <?php echo (!empty($typeAdhesion_err)) ? 'is-invalid' : ''; ?>">
+                <option value="">Sélectionner Type adhésion</option>
+                <?php
+                // Récupérer les types des adhésions depuis la base de données
+                $sql_adhesion = "SELECT * from adhesion";
+                $result_adhesion = mysqli_query($conn, $sql_adhesion);
+                if (mysqli_num_rows($result_adhesion) > 0) {
+                    while ($row_adhesion = mysqli_fetch_assoc($result_adhesion)) {
+                        echo "<option value='" . $row_adhesion['adhesion_id'] . "'>" . $row_adhesion['typeAdhesion'] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <span class="invalid-feedback"><?php echo $typeAdhesion_err; ?></span>
         </div>
         <div class="form-group">
             <label>Statut</label>
@@ -117,6 +142,6 @@ ob_end_flush();
 </div>
 
 <?php
-include './includes/scripts.php';
-include './includes/footer.php';
+include('includes/scripts.php');
+include('includes/footer.php');
 ?>

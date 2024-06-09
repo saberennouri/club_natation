@@ -96,13 +96,13 @@
     require_once 'config.php';
 
     // Exécution de la requête SQL
-    $sql = "SELECT RC.resultat_id, RC.Temps, C.Nom_Competition, C.Date_Competition, C.Lieu, A.prenom AS Prenom_Athlete,
+    $sql = "SELECT RC.resultat_id, RC.Temps, C.nom, C.date_debut, C.Lieu, A.prenom AS Prenom_Athlete,
      A.nom AS Nom_Athlete, RC.Position AS Position_Participant, P.temps_enregistre AS Temps_Performance,
       P.classement AS Classement_Performance 
-      FROM resultats_competitions RC 
+      FROM resultats RC 
       JOIN competitions C ON RC.competition_id = C.competition_id 
       JOIN athletes A ON RC.athlete_id = A.athlete_id 
-      JOIN participants_competitions PC ON RC.competition_id = PC.competition_id 
+      JOIN participantscompetitions PC ON RC.competition_id = PC.competition_id 
       AND RC.athlete_id = PC.athlete_id 
     LEFT JOIN performances P ON RC.athlete_id = P.athlete_id;";
     $result = $conn->query($sql);

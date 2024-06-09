@@ -8,11 +8,13 @@ if (isset($_POST['ajouter'])) {
     $nom = $_POST['nom'];
     $date = $_POST['date_evenement'];
     $lieu = $_POST['lieu'];
+    $heuredebut=$_POST['heuredebut'];
+    $heurefin=$_POST['heurefin'];
     
 
     // Requête SQL pour insérer un nouvel événement dans la base de données
-    $sql = "INSERT INTO evenements (nom, date_evenement, lieu)
-     VALUES ('$nom', '$date', '$lieu')";
+    $sql = "INSERT INTO evenements (nom, date_evenement, lieu,heure_debut,heure_fin)
+     VALUES ('$nom', '$date', '$lieu','$heuredebut','$heurefin')";
     
     // Exécuter la requête
     if (mysqli_query($conn, $sql)) {
@@ -24,4 +26,3 @@ if (isset($_POST['ajouter'])) {
     // Fermer la connexion à la base de données
     mysqli_close($conn);
 }
-?>

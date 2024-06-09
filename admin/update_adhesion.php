@@ -15,6 +15,7 @@ if(isset($_GET['id'])) {
     // Vérifier si la requête a retourné des résultats
     if(mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+        //var_dump($row);
 
         // Récupérer tous les statuts disponibles
         $query_statuts = "SELECT DISTINCT statut FROM adhesion";
@@ -55,7 +56,9 @@ if(isset($_GET['id'])) {
         </div>
         <div class="form-group">
             <label for="new_statut">Nouveau statut :</label>
+            
             <select class="form-control" id="new_statut" name="new_statut">
+            <option value="">Sélectionner Statut</option>
                 <?php
                 // Afficher tous les statuts disponibles dans la liste déroulante
                 while($row_statut = mysqli_fetch_assoc($result_statuts)) {
@@ -63,6 +66,23 @@ if(isset($_GET['id'])) {
                 }
                 ?>
             </select>
+        </div>
+        <div class="form-group">
+            <label>Type Adhésion</label>
+            <select name="adhesion_type" class="form-control <?php echo (!empty($typeAdhesion_err)) ? 'is-invalid' : ''; ?>">
+                <option value="">Sélectionner Type adhésion</option>
+                <?php
+                // Récupérer les types des adhésions depuis la base de données
+                $sql_adhesion = "SELECT * from adhesion";
+                $result_adhesion = mysqli_query($conn, $sql_adhesion);
+                if (mysqli_num_rows($result_adhesion) > 0) {
+                    while ($row_adhesion = mysqli_fetch_assoc($result_adhesion)) {
+                        echo "<option value='" . $row_adhesion['adhesion_id'] . "'>" . $row_adhesion['typeAdhesion'] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <span class="invalid-feedback"><?php echo $typeAdhesion_err; ?></span>
         </div>
         <button type="submit" name="update_adhesion" class="btn btn-primary">Modifier</button>
         <a href="adhesions.php" class="btn btn-secondary">Annuler</a>

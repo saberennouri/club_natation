@@ -6,11 +6,11 @@ include('includes/navbar.php');
 
 <div class="container mt-5">
     <h2>Gestion des entraineurs du Club Natation</h2>
-    <a href="createCoach.php" class="btn btn-primary my-3">Ajouter entraineur</a>
-    <table class="table">
+    <a href="createUser.php" class="btn btn-primary my-3">Ajouter entraineur</a>
+    <table class="table table-hover border">
         <thead>
             <tr> 
-                <th>ID</th>
+         
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>email</th>
@@ -24,23 +24,22 @@ include('includes/navbar.php');
             require_once 'config.php';
 
             // Sélection des membres
-            $sql = "SELECT * FROM entraineurs";
+            $sql = "SELECT * FROM utilisateurs where role_id='3'";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                    <td>".$row['entraineur_id']."</td>
-                    <td>".$row['prenom']."</td>
-                    <td>".$row['nom']."</td>
-                    <td>".$row['email']."</td>
-                    <td>".$row['numero_telephone']."</td>
-                    <td>
-                    
-                    <a href='updateCoach.php?id=".$row['entraineur_id']."' class='btn btn-warning'>Modifier</a>
-                    <a href='deleteCoach.php?id=".$row['entraineur_id']."' class='btn btn-danger'>Supprimer</a>
-                    </td>
-                    </tr>";
+                while($row = $result->fetch_assoc())  {
+                    echo "<tr>";
+                    echo "<td>" . $row['prenom'] . "</td>";
+                    echo "<td>" . $row['nom'] . "</td>";
+                    echo "<td>" . $row['email'] . "</td>";
+                    echo "<td>" . $row['telephone'] . "</td>";
+                    echo "<td>
+                           
+                            <a href='updateUser.php?id=" . $row['utilisateur_id'] . "' class='btn btn-warning'>Modifier</a>
+                            <a href='deleteUser.php?id=" . $row['utilisateur_id'] . "' class='btn btn-danger'>Supprimer</a>
+                          </td>";
+                    echo "</tr>";
                 }
             } else {
                 echo "<tr><td colspan='5'>Aucun membre trouvé</td></tr>";

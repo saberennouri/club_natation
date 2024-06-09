@@ -5,15 +5,17 @@ include('includes/navbar.php');
 
 
 <div class="container mt-5">
-    <h2>Gestion des evenements du Club Natation</h2>
+    <center><h2>Liste des evenements </h2></center>
     <a href="createEvent.php" class="btn btn-primary my-3">Ajouter evenement</a>
-    <table class="table">
+    <table class="table table-hover border">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
                 <th>Date_evenement</th>
                 <th>lieu </th>
+                <th>Heure Début</th>
+                <th>Heure Fin</th>
                 <th style="text-align:center">Actions</th>
                
             </tr>
@@ -35,6 +37,8 @@ include('includes/navbar.php');
                     echo "<td>".$row['nom']."</td>";
                     echo "<td>".$row['date_evenement']."</td>";
                     echo "<td>".$row['lieu']."</td>";
+                    echo "<td>".$row['heure_debut']."</td>";
+                    echo "<td>".$row['heure_fin']."</td>";
                     echo "<td>
                            
                             <a href='updateEvent.php?id=".$row['evenement_id']."' class='btn btn-warning'>Modifier</a>

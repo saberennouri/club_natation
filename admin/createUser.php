@@ -4,12 +4,20 @@ include('includes/navbar.php');
 ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Ajouter un utilisateur</h2>
+    <center><h2 class="mb-4">Interface Ajout</h2></center>
     <form method="post" action="addUser.php">
-       
-        <div class="form-group">
+    <div class="form-group">
             <label for="nom">Nom :</label>
             <input type="text" class="form-control" id="nom" name="nom" required>
+        </div>
+        <div class="form-group">
+            <label for="prenom">Prénom :</label>
+            <input type="text" class="form-control" id="prenom" name="prenom" required>
+        </div>
+       
+        <div class="form-group">
+            <label for="telephone">Télephone :</label>
+            <input type="text" class="form-control" id="telephone" name="telephone" required>
         </div>
         <div class="form-group">
             <label for="email">Email :</label>

@@ -17,7 +17,14 @@ include('includes/navbar.php');
             <div class="form-group">
                 <label for="lieu">Lieu :</label>
                 <input type="text" class="form-control" id="lieu" name="lieu" required>
-            </div>            
+            </div>
+            <div class="form-group">
+                <label for="heuredebut">Heure Début :</label>
+                <input type="time" name="heuredebut" id="heuredebut">
+            
+                <label for="heurefin">Heure Fin :</label>
+                <input type="time" name="heurefin" id="heurefin">
+            </div>           
             <button type="submit" name="ajouter" class="btn btn-primary">Ajouter</button>
         </form>
     </div>
