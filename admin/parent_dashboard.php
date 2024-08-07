@@ -71,6 +71,4 @@ $stmtparent->close();
 $stmtathlete->close();
 $conn->close();
 
-?>
- 
 

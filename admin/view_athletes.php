@@ -14,7 +14,7 @@ if (!isset($_SESSION['email_entraineur'])) {
 $email = mysqli_real_escape_string($conn, $_SESSION['email_entraineur']);
 
 // Préparation de la requête pour récupérer les informations de l'entraîneur
-$sqlentraineur = "SELECT entraineur_id, prenom, nom, email, numero_telephone FROM entraineurs WHERE email = ?";
+$sqlentraineur = "SELECT entraineur_id FROM entraineurs WHERE email = ?";
 $stmtentraineur = $conn->prepare($sqlentraineur);
 $stmtentraineur->bind_param("s", $email);
 $stmtentraineur->execute();
@@ -25,16 +25,12 @@ if ($resultentraineur->num_rows > 0) {
     $entraineur_id = $row_entraineur['entraineur_id'];
     $_SESSION['entraineur_id'] = $entraineur_id;
 
-    // Préparation de la requête pour récupérer les équipes associées à l'entraîneur avec jointure
-    $sqlequipes = "SELECT e.id_equipe, e.nom, e.description 
-                   FROM equipe e 
-                   JOIN membre_equipe me ON e.id_equipe = me.id_equipe
-                   JOIN entraineurs en ON me.id_athlete = en.entraineur_id
-                   WHERE en.entraineur_id = ?";
-    $stmtequipes = $conn->prepare($sqlequipes);
-    $stmtequipes->bind_param("i", $entraineur_id);
-    $stmtequipes->execute();
-    $resultequipes = $stmtequipes->get_result();
+    // Préparation de la requête pour récupérer les athlètes associés à l'entraîneur avec jointure
+    $sqlathlete = "SELECT athlete_id, prenom, nom FROM athletes WHERE entraineur_id = ?";
+    $stmtathlete = $conn->prepare($sqlathlete);
+    $stmtathlete->bind_param("i", $entraineur_id);
+    $stmtathlete->execute();
+    $resultathlete = $stmtathlete->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -45,33 +41,31 @@ if ($resultentraineur->num_rows > 0) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container">
+<div class="container mt-5">
     <h2 class="text-center">Entraîneur Dashboard</h2>
-    <h3>Équipes</h3>
+    <h3 class="mt-4">Athlètes</h3>
     <table class="table table-hover border">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
-                <th>Description</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            if ($resultequipes->num_rows > 0) {
-                while ($row = $resultequipes->fetch_assoc()) {
+            if ($resultathlete->num_rows > 0) {
+                while ($row = $resultathlete->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_equipe']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['nom']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['description']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['athlete_id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['prenom']) . " " . htmlspecialchars($row['nom']) . "</td>";
                     echo "<td>
-                            <a href='view_equipes.php?equipe_id=" . htmlspecialchars($row['id_equipe']) . "'>View</a>
+                            <a href='view_athlete.php?athlete_id=" . htmlspecialchars($row['athlete_id']) . "' class='btn btn-primary btn-sm'>View</a>
                           </td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='4'>No teams found</td></tr>";
+                echo "<tr><td colspan='3'>No athletes found</td></tr>";
             }
             ?>
         </tbody>
@@ -80,12 +74,15 @@ if ($resultentraineur->num_rows > 0) {
 </div>
 
 <?php
-
 } else {
-    echo "No entraineur found.";
+    echo "No entraîneur found.";
 }
+
 
 $conn->close();
 ?>
-</body>
-</html>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+

@@ -36,7 +36,7 @@ if ($resultparent->num_rows > 0) {
         <br><br><br>
         <div class="row">
             <div class="col-md-4">
-                <a href="performance.php" class="btn btn-primary btn-lg btn-block">Suivi des performances</a>
+                <a href="performanceAthlete.php" class="btn btn-primary btn-lg btn-block">Suivi des performances</a>
             </div>
             <div class="col-md-4">
                 <a href="fitness.php" class="btn btn-primary btn-lg btn-block">Suivi de la condition physique</a>
